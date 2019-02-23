@@ -35,13 +35,14 @@ kotlinFrontend {
         dependency "style-loader"
         dependency "@amcharts/amcharts4"
         dependency "@amcharts/amcharts4-geodata"
+        devDependency("webpack", "4.28.4")
         devDependency "karma"
     }
 
     webpackBundle {
         bundleName = "countrygame"
         contentPath = file("src/main/web")
-        mode = "production"
+        mode = "development"
     }
 
     define "PRODUCTION", false

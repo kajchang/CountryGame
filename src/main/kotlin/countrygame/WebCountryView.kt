@@ -30,6 +30,11 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
 
         val map = create("map", MapChart)
         map.geodata = am4geodata_worldLow
+        map.projection = Miller()
+        val series: dynamic = MapPolygonSeries()
+        map.series.push(series)
+        series.useGeodata = true
+        console.log(map)
     }
 
     private fun unregister() {

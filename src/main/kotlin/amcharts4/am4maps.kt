@@ -3,3 +3,4 @@
 package amcharts4
 
 external val MapChart: dynamic
+external class MapPolygonSeries()
