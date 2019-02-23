@@ -1,10 +1,29 @@
 package countrygame
 
-import org.w3c.dom.HTMLDivElement
-import kotlin.browser.document
-import kotlin.dom.appendText
+import kotlin.browser.*
 
 fun main(args: Array<String>) {
-    val div = document.getElementById("app") as HTMLDivElement
-    div.appendText("Hello World")
+    var application: ApplicationBase? = null
+
+    val state: dynamic = module.hot?.let { hot ->
+        hot.accept()
+
+        hot.dispose { data ->
+            data.appState = application?.dispose()
+            application = null
+        }
+    }
+
+    if (document.body != null) {
+        application = start(state)
+    } else {
+        application = null
+        document.addEventListener("DOMContentLoaded", { application = start(state) })
+    }
+}
+
+fun start(state: dynamic): ApplicationBase {
+    val application = MainApplication()
+    application.start(state?.appState as? Map<String, Any> ?: emptyMap())
+    return application
 }
