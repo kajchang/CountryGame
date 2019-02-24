@@ -19,7 +19,6 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
 
         val map = create(mapDiv.id, MapChart)
         map.geodata = am4geodata_worldHigh
-        console.log(am4geodata_worldHigh)
         map.projection = Miller()
         val series: dynamic = map.series.push(MapPolygonSeries())
         series.useGeodata = true
