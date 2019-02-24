@@ -1,5 +1,5 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-if (defined.PRODUCTION) {
+if (process.env.TRAVIS) {
     config.plugins.push(new UglifyJsPlugin);
 }

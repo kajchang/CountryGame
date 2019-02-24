@@ -47,8 +47,6 @@ kotlinFrontend {
         contentPath = file("src/main/web")
         mode = "production"
     }
-
-    define "PRODUCTION", true
 }
 
 compileKotlin2Js {
