@@ -5,20 +5,20 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         view.presenter = this
     }
 
-    private var displayedCountry: String = ""
+    private var selectedRegion: String = ""
 
-    fun setCountry(country: String) {
-        displayedCountry = country
-        // view.displayCountry(country)
+    fun setRegion(region: String) {
+        selectedRegion = region
+        view.displayRegion(selectedRegion)
     }
 
     override fun dispose(): String {
         view.dispose()
-        return displayedCountry
+        return selectedRegion
     }
 
     override fun restore(state: String) {
-        displayedCountry = state
-        // view.displayCountry(displayedCountry)
+        selectedRegion = state
+        view.displayRegion(selectedRegion)
     }
 }

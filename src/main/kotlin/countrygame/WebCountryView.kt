@@ -7,13 +7,30 @@ import org.w3c.dom.events.Event
 class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: HTMLDivElement) : CountryView {
     override lateinit var presenter: CountryPresenter
 
-    private val setCountry: (Event) -> Unit = {event ->
+    private val setRegion: (Event) -> Unit = {event ->
         val button = event.target as HTMLButtonElement
-        presenter.setCountry(button.name)
+        presenter.setRegion(button.name)
+    }
+
+    override fun displayRegion(region: String) {
+        // in the future, hardcode specific regions
+
+        val map = create("map", MapChart)
+        map.seriesContainer.draggable = false
+        map.seriesContainer.resizable = false
+        map.maxZoomLevel = 1
+        map.geodata = am4geodata_worldHigh
+        map.projection = Miller()
+        val series: dynamic = map.series.push(MapPolygonSeries())
+        console.log(series)
+        series.useGeodata = true
+        val hs: dynamic = series.mapPolygons.template.states.create("hover")
+        hs.properties.fill = color("#AECAA7")
     }
 
     init {
         register()
+        displayRegion("World")
     }
 
     override fun dispose() {
@@ -25,17 +42,16 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
 
         for (idx in 0 until buttons.length) {
             val button = buttons[idx] as HTMLButtonElement
-            button.addEventListener("click", setCountry)
+            button.addEventListener("click", setRegion)
         }
-
-        val map = create("map", MapChart)
-        map.geodata = am4geodata_worldHigh
-        map.projection = Miller()
-        val series: dynamic = MapPolygonSeries()
-        map.series.push(series)
-        series.useGeodata = true
     }
 
     private fun unregister() {
+        val buttons = buttonDiv.getElementsByTagName("button")
+
+        for (idx in 0 until buttons.length) {
+            val button = buttons[idx] as HTMLButtonElement
+            button.removeEventListener("click", setRegion)
+        }
     }
 }

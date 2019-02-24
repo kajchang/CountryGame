@@ -3,3 +3,4 @@
 package amcharts4
 
 external fun create(divId: String, type: dynamic) : dynamic
+external fun color(color: String) : dynamic
