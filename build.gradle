@@ -38,14 +38,13 @@ kotlinFrontend {
         devDependency "uglifyjs-webpack-plugin"
         devDependency "copy-webpack-plugin"
         devDependency("webpack", "4.28.4")
-        devDependency "karma"
     }
 
     webpackBundle {
         publicPath = "/"
         bundleName = "countrygame"
         contentPath = file("src/main/web")
-        mode = "production"
+        mode = "development"
     }
 }
 

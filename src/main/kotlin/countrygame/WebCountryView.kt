@@ -12,10 +12,8 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         presenter.setRegion(button.name)
     }
 
-    override fun displayRegion(regionName: String, include: MutableList<String>?) {
-        regionElement.textContent = regionName
-
-        // in the future, hardcode specific regions
+    override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>) {
+        regionElement.textContent = regionName.replace('-', ' ')
 
         val map = create(mapDiv.id, MapChart)
         map.geodata = am4geodata_worldHigh
@@ -29,6 +27,12 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
             }
             series.include = result
         }
+        map.homeZoomLevel = initialZoom
+        map.minZoomLevel = initialZoom
+        val homeGeoPoint: dynamic = object{}
+        homeGeoPoint.latitude = initialPoint["latitude"]
+        homeGeoPoint.longitude = initialPoint["longitude"]
+        map.homeGeoPoint = homeGeoPoint
         val hs: dynamic = series.mapPolygons.template.states.create("hover")
         hs.properties.fill = color("#AECAA7")
     }

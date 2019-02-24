@@ -15,14 +15,21 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     fun setRegion(region: String) {
         selectedRegion = region
 
+        @Suppress("UNCHECKED_CAST")
+        val include = Regions[region]?.get("include") as MutableList<String>?
+
+        @Suppress("UNCHECKED_CAST")
+        val initialGeoPoint = Regions[region]?.get("initialPoint") as Map<String, Double>
+        val initialZoom = Regions[region]?.get("initialZoom") as Double
+
         clearCountries()
         am4geodata_worldHigh.features.forEach {country ->
-            if (Regions[region]?.contains(country.properties.id as String) != false) {
+            if (include?.contains(country.properties.id as String) != false) {
                 addCountry(country)
             }
         }
 
-        view.displayRegion(region.replace('-', ' '), Regions[region])
+        view.displayRegion(region, include, initialZoom, initialGeoPoint)
     }
 
     private fun addCountry(country: dynamic) {
