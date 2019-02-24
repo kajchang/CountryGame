@@ -1,6 +1,7 @@
-package countrygame
+package countrygame.application
 
 import amcharts4.am4geodata_worldHigh
+import countrygame.utilities.Regions
 
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, String> {
     private lateinit var selectedRegion: String

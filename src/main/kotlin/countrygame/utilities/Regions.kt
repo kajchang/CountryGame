@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.utilities
 
 val Regions: Map<String, Map<String, Any?>> = mapOf(
         "world" to mapOf(

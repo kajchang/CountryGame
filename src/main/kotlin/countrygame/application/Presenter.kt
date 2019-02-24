@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.application
 
 interface Presenter<out ViewType : Any, StateType: Any> {
     val view: ViewType

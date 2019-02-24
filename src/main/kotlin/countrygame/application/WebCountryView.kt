@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.application
 
 import amcharts4.*
 import org.w3c.dom.*
@@ -16,6 +16,7 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         regionElement.textContent = regionName.replace('-', ' ')
 
         val map = create(mapDiv.id, MapChart)
+        js("window.map = map")
         map.geodata = am4geodata_worldHigh
         map.projection = Miller()
         val series: dynamic = map.series.push(MapPolygonSeries())
@@ -27,12 +28,14 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
             }
             series.include = result
         }
+        map.maxPanOut = 0.1
         map.homeZoomLevel = initialZoom
         map.minZoomLevel = initialZoom
-        val homeGeoPoint: dynamic = object{}
-        homeGeoPoint.latitude = initialPoint["latitude"]
-        homeGeoPoint.longitude = initialPoint["longitude"]
-        map.homeGeoPoint = homeGeoPoint
+        @Suppress("unused")
+        map.homeGeoPoint = object {
+            val latitude = initialPoint["latitude"]
+            val longitude = initialPoint["longitude"]
+        }
         val hs: dynamic = series.mapPolygons.template.states.create("hover")
         hs.properties.fill = color("#AECAA7")
     }

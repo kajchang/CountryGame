@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.application
 
 import org.w3c.dom.*
 import kotlin.browser.*

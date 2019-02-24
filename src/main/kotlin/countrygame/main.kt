@@ -1,5 +1,7 @@
 package countrygame
 
+import countrygame.application.ApplicationBase
+import countrygame.application.MainApplication
 import kotlin.browser.*
 
 fun main() {

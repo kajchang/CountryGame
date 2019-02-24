@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.application
 
 interface CountryView {
     var presenter: CountryPresenter

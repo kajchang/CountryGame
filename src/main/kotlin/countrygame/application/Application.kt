@@ -1,4 +1,4 @@
-package countrygame
+package countrygame.application
 
 abstract class ApplicationBase {
     abstract val stateKeys: List<String>
