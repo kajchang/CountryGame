@@ -12,7 +12,8 @@ class MainApplication : ApplicationBase() {
     override fun start(state: Map<String, Any>) {
         view = WebCountryView(
                 document.getElementById("country-buttons")!! as HTMLDivElement,
-                document.getElementById("map")!! as HTMLDivElement)
+                document.getElementById("map")!! as HTMLDivElement,
+                document.getElementById("region")!!)
         presenter = CountryPresenter(view)
 
         state["country"]?.let { country ->

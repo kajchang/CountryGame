@@ -4,7 +4,7 @@ import amcharts4.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
 
-class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: HTMLDivElement) : CountryView {
+class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: HTMLDivElement, private val regionElement: Element) : CountryView {
     override lateinit var presenter: CountryPresenter
 
     private val setRegion: (Event) -> Unit = {event ->
@@ -12,7 +12,9 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         presenter.setRegion(button.name)
     }
 
-    override fun displayRegion(region: String) {
+    override fun displayRegion(regionName: String, include: MutableList<String>?) {
+        regionElement.textContent = regionName
+
         // in the future, hardcode specific regions
 
         val map = create(mapDiv.id, MapChart)
@@ -23,12 +25,11 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         map.projection = Miller()
         val series: dynamic = map.series.push(MapPolygonSeries())
         series.useGeodata = true
+        if (include != null) {
+            series.include(include)
+        }
         val hs: dynamic = series.mapPolygons.template.states.create("hover")
         hs.properties.fill = color("#AECAA7")
-        presenter.clearCountries()
-        am4geodata_worldHigh.features.forEach { country ->
-            presenter.addCountry(country.properties.name as String)
-        }
     }
 
     init {

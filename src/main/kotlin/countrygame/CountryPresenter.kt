@@ -1,18 +1,18 @@
 package countrygame
 
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, String> {
-    private var selectedRegion = "world"
+    private lateinit var selectedRegion: String
     private var countries = mutableListOf<String>()
 
     init {
         view.presenter = this
-        view.displayRegion(selectedRegion)
+        setRegion("world")
     }
 
 
     fun setRegion(region: String) {
         selectedRegion = region
-        view.displayRegion(selectedRegion)
+        view.displayRegion(region.replace('-', ' '), Regions[region])
     }
 
     fun addCountry(country: String) {
@@ -33,7 +33,6 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     }
 
     override fun restore(state: String) {
-        selectedRegion = state
-        view.displayRegion(selectedRegion)
+        setRegion(state)
     }
 }
