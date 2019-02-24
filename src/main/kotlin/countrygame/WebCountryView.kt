@@ -15,22 +15,24 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
     override fun displayRegion(region: String) {
         // in the future, hardcode specific regions
 
-        val map = create("map", MapChart)
+        val map = create(mapDiv.id, MapChart)
         map.seriesContainer.draggable = false
         map.seriesContainer.resizable = false
         map.maxZoomLevel = 1
         map.geodata = am4geodata_worldHigh
         map.projection = Miller()
         val series: dynamic = map.series.push(MapPolygonSeries())
-        console.log(series)
         series.useGeodata = true
         val hs: dynamic = series.mapPolygons.template.states.create("hover")
         hs.properties.fill = color("#AECAA7")
+        presenter.clearCountries()
+        am4geodata_worldHigh.features.forEach { country ->
+            presenter.addCountry(country.properties.name as String)
+        }
     }
 
     init {
         register()
-        displayRegion("World")
     }
 
     override fun dispose() {
