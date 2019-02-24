@@ -18,9 +18,6 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         // in the future, hardcode specific regions
 
         val map = create(mapDiv.id, MapChart)
-        map.seriesContainer.draggable = false
-        map.seriesContainer.resizable = false
-        map.maxZoomLevel = 1
         map.geodata = am4geodata_worldHigh
         map.projection = Miller()
         val series: dynamic = map.series.push(MapPolygonSeries())

@@ -2,7 +2,7 @@ package countrygame
 
 import kotlin.browser.*
 
-fun main(args: Array<String>) {
+fun main() {
     var application: ApplicationBase? = null
 
     val state: dynamic = module.hot?.let { hot ->
@@ -12,6 +12,8 @@ fun main(args: Array<String>) {
             data.appState = application?.dispose()
             application = null
         }
+
+        hot.data
     }
 
     if (document.body != null) {
