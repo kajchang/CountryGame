@@ -26,7 +26,11 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         val series: dynamic = map.series.push(MapPolygonSeries())
         series.useGeodata = true
         if (include != null) {
-            series.include(include)
+            val result: dynamic = js("[]")
+            for (value in include) {
+                result.push(value)
+            }
+            series.include = result
         }
         val hs: dynamic = series.mapPolygons.template.states.create("hover")
         hs.properties.fill = color("#AECAA7")

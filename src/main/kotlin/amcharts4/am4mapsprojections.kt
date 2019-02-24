@@ -3,4 +3,4 @@
 
 package amcharts4
 
-external class Miller()
+external class Miller

@@ -15,6 +15,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     fun setRegion(region: String) {
         selectedRegion = region
 
+        clearCountries()
         am4geodata_worldHigh.features.forEach {country ->
             if (Regions[region]?.contains(country.properties.id as String) != false) {
                 addCountry(country)
@@ -30,6 +31,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     private fun randomCountry(): dynamic {
         return countries.random()
+    }
+
+    private fun clearCountries() {
+        countries.clear()
     }
 
     override fun dispose(): String {
