@@ -1,8 +1,10 @@
 package countrygame
 
+import amcharts4.am4geodata_worldHigh
+
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, String> {
     private lateinit var selectedRegion: String
-    private var countries = mutableListOf<String>()
+    private var countries: MutableList<dynamic> = mutableListOf()
 
     init {
         view.presenter = this
@@ -12,19 +14,22 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     fun setRegion(region: String) {
         selectedRegion = region
+
+        am4geodata_worldHigh.features.forEach {country ->
+            if (Regions[region]?.contains(country.properties.id as String) != false) {
+                addCountry(country)
+            }
+        }
+
         view.displayRegion(region.replace('-', ' '), Regions[region])
     }
 
-    fun addCountry(country: String) {
+    private fun addCountry(country: dynamic) {
         countries.add(country)
     }
 
-    fun randomCountry(): String {
+    private fun randomCountry(): dynamic {
         return countries.random()
-    }
-
-    fun clearCountries() {
-        countries.clear()
     }
 
     override fun dispose(): String {
