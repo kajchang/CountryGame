@@ -3,7 +3,7 @@ package countrygame.application
 import org.w3c.dom.*
 import kotlin.browser.*
 
-class MainApplication : ApplicationBase() {
+class MainApplication : ApplicationBase {
     private lateinit var view: WebCountryView
     private lateinit var presenter: CountryPresenter
 
