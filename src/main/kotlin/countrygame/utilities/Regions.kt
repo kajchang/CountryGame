@@ -1,14 +1,6 @@
 package countrygame.utilities
 
 val Regions: Map<String, Map<String, Any?>> = mapOf(
-        "world" to mapOf(
-                "initialZoom" to 1.0,
-                "initialPoint" to mapOf(
-                        "longitude" to 0.0,
-                        "latitude" to -9.132500212389965
-                ),
-                "include" to null
-        ),
         "asia" to mapOf(
                 "initialZoom" to 0.95,
                 "initialPoint" to mapOf(

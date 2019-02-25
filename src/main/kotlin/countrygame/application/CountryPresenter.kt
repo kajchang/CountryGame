@@ -17,7 +17,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     init {
         view.presenter = this
-        setRegion("world")
+        setRegion("asia")
     }
 
     fun startGame() {
