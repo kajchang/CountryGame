@@ -79,8 +79,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                     circles.push(nativeObject(mapOf(
                             "latitude" to center[1],
                             "longitude" to center[0],
-                            "name" to country.properties.name,
-                            "id" to country.properties.id
+                            "name" to country.properties.name
                     )))
                 }
             }

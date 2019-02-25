@@ -10,7 +10,7 @@ val Regions: Map<String, Map<String, Any?>> = mapOf(
                 "include" to null
         ),
         "asia" to mapOf(
-                "initialZoom" to 1.0,
+                "initialZoom" to 0.95,
                 "initialPoint" to mapOf(
                         "longitude" to 85.69564437934545,
                         "latitude" to 24.353068430752273
@@ -26,7 +26,7 @@ val Regions: Map<String, Map<String, Any?>> = mapOf(
                 "include" to mutableListOf("KE", "SD", "TN", "MG", "DZ", "CI", "CV", "TG", "BI", "NA", "GN", "SH", "ML", "GM", "ZM", "LR", "ZW", "MR", "CF", "ZA", "GW", "GA", "UG", "MU", "ST", "RE", "YT", "TZ", "SS", "MZ", "SC", "CG", "KM", "CD", "BJ", "AO", "LS", "BF", "SZ", "ER", "EG", "DJ", "BW", "SO", "MW", "TD", "GH", "MA", "NG", "NE", "RW", "SL", "ET", "SN", "CM", "GQ", "LY", "EH")
         ),
         "south-america" to mapOf(
-                "initialZoom" to 1.0,
+                "initialZoom" to 0.95,
                 "initialPoint" to mapOf(
                         "longitude" to -63.22610000000001,
                         "latitude" to -19.86896924235985
@@ -34,7 +34,7 @@ val Regions: Map<String, Map<String, Any?>> = mapOf(
                 "include" to mutableListOf("SR", "EC", "GF", "FK", "BO", "VE", "CL", "BR", "PE", "PY", "UY", "CO", "AR", "GY", "BZ", "TC", "MS", "GP", "HT", "MF", "NI")
         ),
         "north-america" to mapOf(
-                "initialZoom" to 1.4,
+                "initialZoom" to 1.2,
                 "initialPoint" to mapOf(
                         "longitude" to -108.06094713659054,
                         "latitude" to 54.20595084363595

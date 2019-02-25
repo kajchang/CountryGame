@@ -30,8 +30,12 @@ class WebCountryView(
         val map = create(mapDiv.id, MapChart)
         map.geodata = am4geodata_worldHigh
         map.projection = Miller()
-        map.maxPanOut = 0.1
         map.homeZoomLevel = initialZoom
+        map.seriesContainer.draggable = false
+        map.seriesContainer.resizable = false
+        map.seriesContainer.events.disableType("doublehit")
+        map.chartContainer.background.events.disableType("doublehit")
+        map.maxZoomLevel = initialZoom
         map.minZoomLevel = initialZoom
         map.homeGeoPoint = nativeObject(initialPoint)
 
