@@ -40,6 +40,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                 window.clearInterval(interval as Int)
                 interval = null
                 gameStarted = false
+                addCountries(selectedRegion)
                 view.displayWin()
             } else {
                 nextCountry()
@@ -63,10 +64,9 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         val initialZoom = Regions[region]?.get("initialZoom") as Double
 
         reset()
+        addCountries(region)
         am4geodata_worldHigh.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
-                addCountry(country.properties.name as String)
-
                 // calculate area and center for small countries
 
                 var biggestArea: Double? = null
@@ -107,6 +107,16 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         }
 
         view.displayRegion(region, include, initialZoom, initialGeoPoint, circles)
+    }
+
+    private fun addCountries(region: String) {
+        @Suppress("UNCHECKED_CAST")
+        val include = Regions[region]?.get("include") as MutableList<String>?
+        am4geodata_worldHigh.features.forEach { country ->
+            if (include?.contains(country.properties.id as String) != false) {
+                addCountry(country.properties.name as String)
+            }
+        }
     }
 
     private fun nextCountry() {
