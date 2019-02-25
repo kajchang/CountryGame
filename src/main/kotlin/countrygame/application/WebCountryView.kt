@@ -7,7 +7,6 @@ import amcharts4.projections.Miller
 import countrygame.utilities.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
-import kotlin.math.floor
 
 class WebCountryView(
         private val buttonDiv: HTMLDivElement,
@@ -43,6 +42,10 @@ class WebCountryView(
 
     override fun updateTimer(timer: Int) {
         timerElement.textContent = "${if (timer / 60 >= 10) "" else 0}${timer / 60}:${if (timer % 60 >= 10) "" else 0}${timer % 60}"
+    }
+
+    override fun displayWin() {
+        countryToFindSpan.textContent = "You Win!"
     }
 
     override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {

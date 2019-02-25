@@ -36,7 +36,14 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     fun checkCountry(country: String): Boolean {
         if (country == countryToFind) {
             finishedCountries.add(country)
-            nextCountry()
+            if (countries.size == 0) {
+                window.clearInterval(interval as Int)
+                interval = null
+                gameStarted = false
+                view.displayWin()
+            } else {
+                nextCountry()
+            }
             return true
         }
 
