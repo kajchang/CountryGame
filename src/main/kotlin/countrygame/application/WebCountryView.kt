@@ -14,13 +14,17 @@ class WebCountryView(
         private val regionElement: Element) : CountryView {
     override lateinit var presenter: CountryPresenter
 
-    private val setRegion: (Event) -> Unit = {event ->
+    private val setRegion: (Event) -> Unit = { event ->
         val button = event.target as HTMLButtonElement
         presenter.setRegion(button.name)
     }
 
     private val startGame: (Event) -> Unit = {_ ->
         presenter.startGame()
+    }
+
+    private val checkCountry: (dynamic) -> Unit = { event ->
+        console.log(event.target.dataItem.dataContext.name as String)
     }
 
     override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
@@ -39,13 +43,15 @@ class WebCountryView(
         map.minZoomLevel = initialZoom
         map.homeGeoPoint = nativeObject(initialPoint)
 
-        val mapSeries = map.series.push(MapPolygonSeries())
-        mapSeries.useGeodata = true
+        val mapPolygonSeries = map.series.push(MapPolygonSeries())
+        val mapPolygon = mapPolygonSeries.mapPolygons.template
+        mapPolygonSeries.useGeodata = true
         if (include != null) {
-            mapSeries.include = nativeArray(include)
+            mapPolygonSeries.include = nativeArray(include)
         }
+        mapPolygon.events.on("hit", checkCountry)
 
-        val mapHover = mapSeries.mapPolygons.template.states.create("hover")
+        val mapHover = mapPolygon.states.create("hover")
         mapHover.properties.fill = color("#AECAA7")
 
         val clickableSeries = map.series.push(MapImageSeries())
@@ -54,6 +60,7 @@ class WebCountryView(
         clickable.propertyFields.latitude = "latitude"
         clickable.propertyFields.longitude = "longitude"
         clickableSeries.data = circles
+        clickable.events.on("hit", checkCountry)
 
         val circle = clickable.createChild(Circle)
         circle.radius = 5
