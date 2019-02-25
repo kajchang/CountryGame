@@ -1,6 +1,6 @@
 package countrygame.application
 
-import amcharts4.am4geodata_worldHigh
+import amcharts4.geodata.am4geodata_worldHigh
 import countrygame.utilities.*
 
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, Map<String, Any?>> {

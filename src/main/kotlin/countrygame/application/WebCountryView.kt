@@ -1,8 +1,10 @@
 package countrygame.application
 
-import amcharts4.*
-import countrygame.utilities.nativeArray
-import countrygame.utilities.nativeObject
+import amcharts4.core.*
+import amcharts4.maps.*
+import amcharts4.geodata.am4geodata_worldHigh
+import amcharts4.projections.Miller
+import countrygame.utilities.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
 
