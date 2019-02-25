@@ -3,13 +3,23 @@ package countrygame.application
 import amcharts4.am4geodata_worldHigh
 import countrygame.utilities.*
 
-class CountryPresenter(override val view: CountryView) : Presenter<CountryView, String> {
+class CountryPresenter(override val view: CountryView) : Presenter<CountryView, Map<String, Any?>> {
     private lateinit var selectedRegion: String
-    private var countries = mutableListOf<dynamic>()
+    private var gameStarted = false
+    private var countryToFind: String = ""
+    private var countries = mutableListOf<String>()
 
     init {
         view.presenter = this
         setRegion("world")
+    }
+
+    fun startGame() {
+        if (!gameStarted) {
+            gameStarted = true
+            countryToFind = popCountry()
+            view.displayCountryToFind(countryToFind)
+        }
     }
 
 
@@ -25,12 +35,12 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         val initialGeoPoint = Regions[region]?.get("initialPoint") as Map<String, Double>
         val initialZoom = Regions[region]?.get("initialZoom") as Double
 
-        clearCountries()
+        reset()
         am4geodata_worldHigh.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
-                addCountry(country)
+                addCountry(country.properties.name as String)
 
-                // calculate area and center
+                // calculate area and center for small countries
 
                 var biggestArea: Double? = null
 
@@ -58,7 +68,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                     overallLongCoords.addAll(longCoords)
                 }
 
-                if (biggestArea.unsafeCast<Double>() < 0.1) {
+                if (biggestArea.unsafeCast<Double>() < 0.05) {
                     val center = centroid(overallLatCoords, overallLongCoords)
                     circles.push(nativeObject(mapOf(
                             "latitude" to center[1],
@@ -73,24 +83,38 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         view.displayRegion(region, include, initialZoom, initialGeoPoint, circles)
     }
 
-    private fun addCountry(country: dynamic) {
+    private fun addCountry(country: String) {
         countries.add(country)
     }
 
-    private fun randomCountry(): dynamic {
-        return countries.random()
+    private fun popCountry(): String {
+        return countries.removeAt((0 until countries.size).random())
     }
 
-    private fun clearCountries() {
+    private fun reset() {
         countries.clear()
+        gameStarted = false
     }
 
-    override fun dispose(): String {
+    override fun dispose(): Map<String, Any?> {
         view.dispose()
-        return selectedRegion
+        return mapOf(
+                "selectedRegion" to selectedRegion,
+                "gameStarted" to gameStarted,
+                "countryToFind" to countryToFind
+        )
     }
 
-    override fun restore(state: String) {
-        setRegion(state)
+    override fun restore(state: Map<String, Any?>) {
+        state["selectedRegion"]?.let {selectedRegion ->
+            setRegion(selectedRegion as String)
+        }
+        state["gameStarted"]?.let {gameStarted ->
+            if (gameStarted as Boolean) {
+                countryToFind = state["countryToFind"] as String
+                countries.remove(countryToFind)
+                view.displayCountryToFind(countryToFind)
+            }
+        }
     }
 }

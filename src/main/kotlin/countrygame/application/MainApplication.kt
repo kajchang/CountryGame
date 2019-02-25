@@ -12,16 +12,19 @@ class MainApplication : ApplicationBase {
     override fun start(state: Map<String, Any>) {
         view = WebCountryView(
                 document.getElementById("country-buttons")!! as HTMLDivElement,
+                document.getElementById("start")!! as HTMLButtonElement,
+                document.getElementById("country-to-find")!!,
                 document.getElementById("map")!! as HTMLDivElement,
                 document.getElementById("region")!!)
         presenter = CountryPresenter(view)
 
-        state["country"]?.let { country ->
-            presenter.restore(country as String)
+        state["gameState"]?.let {gameState ->
+            @Suppress("UNCHECKED_CAST")
+            presenter.restore(gameState as Map<String, Any?>)
         }
     }
 
     override fun dispose() = mapOf(
-            "country" to presenter.dispose()
+            "gameState" to presenter.dispose()
     )
 }
