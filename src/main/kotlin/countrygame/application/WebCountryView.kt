@@ -48,9 +48,6 @@ class WebCountryView(private val buttonDiv: HTMLDivElement, private val mapDiv: 
         circle.stroke = color("#000000")
         circle.strokeWidth = 0.5
 
-        js("window.circle = circle")
-
-
         val clickableHover = circle.states.create("hover")
         clickableHover.properties.fill = color("#AECAA7")
     }
