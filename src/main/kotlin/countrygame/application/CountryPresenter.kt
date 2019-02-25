@@ -2,13 +2,18 @@ package countrygame.application
 
 import amcharts4.geodata.am4geodata_worldHigh
 import countrygame.utilities.*
+import kotlin.browser.window
 
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, Map<String, Any?>> {
     private lateinit var selectedRegion: String
     private var gameStarted = false
+
     private var countryToFind: String = ""
     private var countries = mutableListOf<String>()
     private var finishedCountries = mutableListOf<String>()
+
+    private var timer = 0
+    private var interval: Int? = null
 
     init {
         view.presenter = this
@@ -19,6 +24,12 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         if (!gameStarted) {
             gameStarted = true
             nextCountry()
+            view.updateTimer(timer)
+
+            interval = window.setInterval({
+                timer++
+                view.updateTimer(timer)
+            }, 1000)
         }
     }
 
@@ -100,6 +111,11 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         countries.clear()
         gameStarted = false
         countryToFind = ""
+        timer = 0
+        if (interval != null) {
+            window.clearInterval(interval as Int)
+            interval = null
+        }
     }
 
     private fun addCountry(country: String) {
@@ -111,6 +127,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     }
 
     override fun dispose(): Map<String, Any?> {
+        if (interval != null) {
+            window.clearInterval(interval as Int)
+        }
+
         view.dispose()
         return mapOf(
                 "selectedRegion" to selectedRegion,

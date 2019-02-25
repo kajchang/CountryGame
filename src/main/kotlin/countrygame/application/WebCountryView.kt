@@ -7,13 +7,15 @@ import amcharts4.projections.Miller
 import countrygame.utilities.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
+import kotlin.math.floor
 
 class WebCountryView(
         private val buttonDiv: HTMLDivElement,
         private val startButton: HTMLButtonElement,
         private val countryToFindSpan: Element,
         private val mapDiv: HTMLDivElement,
-        private val regionElement: Element) : CountryView {
+        private val regionElement: Element,
+        private val timerElement: Element) : CountryView {
     override lateinit var presenter: CountryPresenter
 
     private val setRegion: (Event) -> Unit = { event ->
@@ -39,9 +41,14 @@ class WebCountryView(
         }
     }
 
+    override fun updateTimer(timer: Int) {
+        timerElement.textContent = "${if (timer / 60 >= 10) "" else 0}${timer / 60}:${if (timer % 60 >= 10) "" else 0}${timer % 60}"
+    }
+
     override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
         regionElement.textContent = regionName.replace('-', ' ')
         countryToFindSpan.textContent = ""
+        timerElement.textContent = ""
 
         val map = create(mapDiv.id, MapChart)
         map.geodata = am4geodata_worldHigh
