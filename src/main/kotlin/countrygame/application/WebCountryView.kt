@@ -24,7 +24,17 @@ class WebCountryView(
     }
 
     private val checkCountry: (dynamic) -> Unit = { event ->
-        console.log(event.target.dataItem.dataContext.name as String)
+        val success = presenter.checkCountry(event.target.dataItem.dataContext.name as String)
+        js("window.event = event")
+        if (success) {
+            if (event.target._className == "MapPolygon") {
+                event.target.states.removeKey("hover")
+                event.target.setState("success")
+            } else {
+                event.target.children._values[0].states.removeKey("hover")
+                event.target.children._values[0].setState("success")
+            }
+        }
     }
 
     override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
@@ -54,6 +64,9 @@ class WebCountryView(
         val mapHover = mapPolygon.states.create("hover")
         mapHover.properties.fill = color("#AECAA7")
 
+        val mapSuccess = mapPolygon.states.create("success")
+        mapSuccess.properties.fill = color("#228B22")
+
         val clickableSeries = map.series.push(MapImageSeries())
         val clickable = clickableSeries.mapImages.template
         clickable.nonScaling = true
@@ -70,6 +83,9 @@ class WebCountryView(
 
         val circleHover = circle.states.create("hover")
         circleHover.properties.fill = color("#AECAA7")
+
+        val circleSuccess = circle.states.create("success")
+        circleSuccess.properties.fill = color("#228B22")
     }
 
     override fun displayCountryToFind(country: String) {

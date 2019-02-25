@@ -8,6 +8,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     private var gameStarted = false
     private var countryToFind: String = ""
     private var countries = mutableListOf<String>()
+    private var finishedCountries = mutableListOf<String>()
 
     init {
         view.presenter = this
@@ -17,17 +18,19 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     fun startGame() {
         if (!gameStarted) {
             gameStarted = true
-            countryToFind = popCountry()
-            view.displayCountryToFind(countryToFind)
+            nextCountry()
         }
     }
 
-    private fun reset() {
-        countries.clear()
-        gameStarted = false
-        countryToFind = ""
-    }
+    fun checkCountry(country: String): Boolean {
+        if (country == countryToFind) {
+            finishedCountries.add(country)
+            nextCountry()
+            return true
+        }
 
+        return false
+    }
 
     fun setRegion(region: String) {
         selectedRegion = region
@@ -74,7 +77,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                     overallLongCoords.addAll(longCoords)
                 }
 
-                if (biggestArea.unsafeCast<Double>() < 0.1) {
+                if (biggestArea.unsafeCast<Double>() < 1) {
                     val center = centroid(overallLatCoords, overallLongCoords)
                     circles.push(nativeObject(mapOf(
                             "latitude" to center[1],
@@ -86,6 +89,17 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         }
 
         view.displayRegion(region, include, initialZoom, initialGeoPoint, circles)
+    }
+
+    private fun nextCountry() {
+        countryToFind = popCountry()
+        view.displayCountryToFind(countryToFind)
+    }
+
+    private fun reset() {
+        countries.clear()
+        gameStarted = false
+        countryToFind = ""
     }
 
     private fun addCountry(country: String) {
@@ -100,8 +114,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         view.dispose()
         return mapOf(
                 "selectedRegion" to selectedRegion,
-                "gameStarted" to gameStarted,
-                "countryToFind" to countryToFind
+                "gameStarted" to gameStarted
         )
     }
 
@@ -111,9 +124,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         }
         state["gameStarted"]?.let {gameStarted ->
             if (gameStarted as Boolean) {
-                countryToFind = state["countryToFind"] as String
-                countries.remove(countryToFind)
-                view.displayCountryToFind(countryToFind)
+                startGame()
             }
         }
     }
