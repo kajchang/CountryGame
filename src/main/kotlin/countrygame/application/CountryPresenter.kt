@@ -22,6 +22,12 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         }
     }
 
+    private fun reset() {
+        countries.clear()
+        gameStarted = false
+        countryToFind = ""
+    }
+
 
     fun setRegion(region: String) {
         selectedRegion = region
@@ -89,11 +95,6 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     private fun popCountry(): String {
         return countries.removeAt((0 until countries.size).random())
-    }
-
-    private fun reset() {
-        countries.clear()
-        gameStarted = false
     }
 
     override fun dispose(): Map<String, Any?> {

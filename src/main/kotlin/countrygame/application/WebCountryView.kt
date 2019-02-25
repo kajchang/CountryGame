@@ -1,7 +1,6 @@
 package countrygame.application
 
 import amcharts4.*
-import countrygame.start
 import countrygame.utilities.nativeArray
 import countrygame.utilities.nativeObject
 import org.w3c.dom.*
@@ -26,6 +25,7 @@ class WebCountryView(
 
     override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
         regionElement.textContent = regionName.replace('-', ' ')
+        countryToFindSpan.textContent = ""
 
         val map = create(mapDiv.id, MapChart)
         map.geodata = am4geodata_worldHigh
