@@ -36,7 +36,6 @@ kotlinFrontend {
         dependency "@amcharts/amcharts4"
         dependency "@amcharts/amcharts4-geodata"
         devDependency "uglifyjs-webpack-plugin"
-        devDependency "copy-webpack-plugin"
         devDependency("webpack", "4.28.4")
     }
 

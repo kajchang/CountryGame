@@ -1,11 +1,12 @@
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const fs = require('fs');
 
 if (process.env.TRAVIS) {
-    config.plugins.push(new CopyPlugin([
-        {
-            from: path.join(__dirname, '..', 'src', 'main', 'web', 'index.prod.html'),
-            to: path.join(__dirname, 'index.html')
-        }
-    ]));
+    fs.writeFileSync(
+        path.join(__dirname, 'index.html'),
+        fs.readFileSync(
+            path.join(__dirname, '..', 'src', 'main', 'web', 'index.html'),
+            'utf8'
+        ).replace('countrygame.bundle.js', 'bundle/countrygame.bundle.js')
+    );
 }
