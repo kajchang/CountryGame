@@ -1,8 +1,10 @@
 package countrygame.application
 
+import countrygame.data.Coordinate
+
 interface CountryView {
     var presenter: CountryPresenter
-    fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic)
+    fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Coordinate, circles: dynamic)
     fun displayCountryToFind(country: String)
     fun updateTimer(timer: Int)
     fun displayWin()

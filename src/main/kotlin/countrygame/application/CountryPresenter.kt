@@ -1,6 +1,7 @@
 package countrygame.application
 
-import amcharts4.geodata.*
+import countrygame.data.Coordinate
+import countrygame.data.Regions
 import countrygame.utilities.*
 import kotlin.browser.window
 
@@ -60,29 +61,12 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
         val circles = js("[]")
 
-        var include: MutableList<String>? = null
-        var initialZoom: Double? = null
-        var initialGeoPoint: Map<String, Double>? = null
-        var geodata: dynamic = null
+        val include: MutableList<String>? = Regions[region]!!.include
+        val initialZoom: Double = Regions[region]!!.initialZoom
+        val initialGeoPoint: Coordinate = Regions[region]!!.initialPoint
+        val geodata: dynamic = Regions[region]!!.geodata
 
         reset()
-
-        if (Regions[region] != null) {
-            @Suppress("UNCHECKED_CAST")
-            include = Regions[region]?.get("include") as MutableList<String>
-
-            @Suppress("UNCHECKED_CAST")
-            initialGeoPoint = Regions[region]?.get("initialPoint") as Map<String, Double>
-            initialZoom = Regions[region]?.get("initialZoom") as Double
-            geodata = am4geodata_worldHigh
-        } else if (region == "united-states") {
-            initialGeoPoint = mapOf(
-                    "latitude" to 48.97460309044186,
-                    "longitude" to -122.59080000000002
-            )
-            initialZoom = 1.0
-            geodata = am4geodata_usaHigh
-        }
 
         geodata.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
@@ -107,7 +91,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
             }
         }
 
-        view.displayRegion(region, geodata, include, initialZoom as Double, initialGeoPoint as Map<String, Double>, circles)
+        view.displayRegion(region, geodata, include, initialZoom, initialGeoPoint, circles)
     }
 
     private fun countryGeo(country: dynamic): List<Any?> {

@@ -3,6 +3,7 @@ package countrygame.application
 import amcharts4.core.*
 import amcharts4.maps.*
 import amcharts4.projections.Miller
+import countrygame.data.Coordinate
 import countrygame.utilities.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
@@ -61,7 +62,7 @@ class WebCountryView(
         countryToFindSpan.textContent = "Good Job!"
     }
 
-    override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
+    override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Coordinate, circles: dynamic) {
         regionElement.textContent = regionName.replace('-', ' ')
         countryToFindSpan.textContent = ""
         timerElement.textContent = ""
@@ -76,7 +77,7 @@ class WebCountryView(
         map.chartContainer.background.events.disableType("doublehit")
         map.maxZoomLevel = initialZoom
         map.minZoomLevel = initialZoom
-        map.homeGeoPoint = nativeObject(initialPoint)
+        map.homeGeoPoint = initialPoint.toObject()
 
         val mapPolygonSeries = map.series.push(MapPolygonSeries())
         val mapPolygon = mapPolygonSeries.mapPolygons.template
