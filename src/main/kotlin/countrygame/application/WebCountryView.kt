@@ -2,7 +2,6 @@ package countrygame.application
 
 import amcharts4.core.*
 import amcharts4.maps.*
-import amcharts4.geodata.am4geodata_worldHigh
 import amcharts4.projections.Miller
 import countrygame.utilities.*
 import org.w3c.dom.*
@@ -28,14 +27,28 @@ class WebCountryView(
 
     private val checkCountry: (dynamic) -> Unit = { event ->
         val success = presenter.checkCountry(event.target.dataItem.dataContext.name as String)
-        js("window.event = event")
+
         if (success) {
-            if (event.target._className == "MapPolygon") {
-                event.target.states.removeKey("hover")
-                event.target.setState("success")
-            } else {
-                event.target.children._values[0].states.removeKey("hover")
-                event.target.children._values[0].setState("success")
+            event.target.parent.chart.series._values.forEach { series ->
+                when (series.className) {
+                    "MapPolygonSeries" -> {
+                        series.children._values.forEach { sprite ->
+                            if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name == event.target.dataItem.dataContext.name) {
+                                sprite.states.removeKey("hover")
+                                sprite.setState("success")
+                            }
+                        }
+                    }
+                    "MapImageSeries" -> {
+                        series.children._values.forEach { sprite ->
+                            if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name == event.target.dataItem.dataContext.name) {
+                                sprite.children._values[0].states.removeKey("hover")
+                                sprite.children._values[0].setState("success")
+                            }
+                        }
+                    }
+                    else -> console.log("This never happens...")
+                }
             }
         }
     }
@@ -48,13 +61,13 @@ class WebCountryView(
         countryToFindSpan.textContent = "You Win!"
     }
 
-    override fun displayRegion(regionName: String, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
+    override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
         regionElement.textContent = regionName.replace('-', ' ')
         countryToFindSpan.textContent = ""
         timerElement.textContent = ""
 
         val map = create(mapDiv.id, MapChart)
-        map.geodata = am4geodata_worldHigh
+        map.geodata = geodata
         map.projection = Miller()
         map.homeZoomLevel = initialZoom
         map.seriesContainer.draggable = false
@@ -72,6 +85,7 @@ class WebCountryView(
             mapPolygonSeries.include = nativeArray(include)
         }
         mapPolygon.events.on("hit", checkCountry)
+
 
         val mapHover = mapPolygon.states.create("hover")
         mapHover.properties.fill = color("#AECAA7")

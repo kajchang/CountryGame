@@ -1,6 +1,6 @@
 package countrygame.application
 
-import amcharts4.geodata.am4geodata_worldHigh
+import amcharts4.geodata.*
 import countrygame.utilities.*
 import kotlin.browser.window
 
@@ -59,44 +59,55 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         selectedRegion = region
 
         val circles = js("[]")
-        val initialZoom: Double
-        val initialGeoPoint: Map<String, Double>
+
+        var include: MutableList<String>? = null
+        var initialZoom: Double? = null
+        var initialGeoPoint: Map<String, Double>? = null
+        var geodata: dynamic = null
 
         reset()
 
         if (Regions[region] != null) {
             @Suppress("UNCHECKED_CAST")
-            val include = Regions[region]?.get("include") as MutableList<String>?
+            include = Regions[region]?.get("include") as MutableList<String>
 
             @Suppress("UNCHECKED_CAST")
             initialGeoPoint = Regions[region]?.get("initialPoint") as Map<String, Double>
             initialZoom = Regions[region]?.get("initialZoom") as Double
+            geodata = am4geodata_worldHigh
+        } else if (region == "united-states") {
+            initialGeoPoint = mapOf(
+                    "latitude" to 48.97460309044186,
+                    "longitude" to -122.59080000000002
+            )
+            initialZoom = 1.0
+            geodata = am4geodata_usaHigh
+        }
 
-            am4geodata_worldHigh.features.forEach { country ->
-                if (include?.contains(country.properties.id as String) != false) {
-                    addCountry(country.properties.name)
+        geodata.features.forEach { country ->
+            if (include?.contains(country.properties.id as String) != false) {
+                addCountry(country.properties.name)
 
-                    val countryStats = countryGeo(country)
+                val countryStats = countryGeo(country)
 
-                    val biggestArea = countryStats[0] as Int
-                    @Suppress("UNCHECKED_CAST")
-                    val overallLatCoords = countryStats[1] as List<Double>
-                    @Suppress("UNCHECKED_CAST")
-                    val overallLongCoords = countryStats[2] as List<Double>
+                val biggestArea = countryStats[0] as Int
+                @Suppress("UNCHECKED_CAST")
+                val overallLatCoords = countryStats[1] as List<Double>
+                @Suppress("UNCHECKED_CAST")
+                val overallLongCoords = countryStats[2] as List<Double>
 
-                    if (biggestArea < 1) {
-                        val center = centroid(overallLatCoords, overallLongCoords)
-                        circles.push(nativeObject(mapOf(
-                                "latitude" to center[1],
-                                "longitude" to center[0],
-                                "name" to country.properties.name
-                        )))
-                    }
+                if (biggestArea < 1) {
+                    val center = centroid(overallLatCoords, overallLongCoords)
+                    circles.push(nativeObject(mapOf(
+                            "latitude" to center[1],
+                            "longitude" to center[0],
+                            "name" to country.properties.name
+                    )))
                 }
             }
-
-            view.displayRegion(region, include, initialZoom, initialGeoPoint, circles)
         }
+
+        view.displayRegion(region, geodata, include, initialZoom as Double, initialGeoPoint as Map<String, Double>, circles)
     }
 
     private fun countryGeo(country: dynamic): List<Any?> {
@@ -172,10 +183,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     }
 
     override fun restore(state: Map<String, Any?>) {
-        state["selectedRegion"]?.let {selectedRegion ->
+        state["selectedRegion"]?.let { selectedRegion ->
             setRegion(selectedRegion as String)
         }
-        state["gameStarted"]?.let {gameStarted ->
+        state["gameStarted"]?.let { gameStarted ->
             if (gameStarted as Boolean) {
                 startGame()
             }

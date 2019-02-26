@@ -1,6 +1,6 @@
-@file:JsModule("@amcharts/amcharts4-geodata/worldHigh")
+@file:JsModule("@amcharts/amcharts4-geodata/usaHigh")
 
 package amcharts4.geodata
 
 @JsName("default")
-external val am4geodata_usHigh: dynamic
+external val am4geodata_usaHigh: dynamic
