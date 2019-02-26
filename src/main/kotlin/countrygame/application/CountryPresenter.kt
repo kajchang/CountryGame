@@ -1,7 +1,6 @@
 package countrygame.application
 
-import countrygame.data.Coordinate
-import countrygame.data.Regions
+import countrygame.data.*
 import countrygame.utilities.*
 import kotlin.browser.window
 
@@ -59,18 +58,18 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     fun setRegion(region: String) {
         selectedRegion = region
 
-        val circles = js("[]")
-
-        val include: MutableList<String>? = Regions[region]!!.include
-        val initialZoom: Double = Regions[region]!!.initialZoom
-        val initialGeoPoint: Coordinate = Regions[region]!!.initialPoint
-        val geodata: dynamic = Regions[region]!!.geodata
-
         reset()
+
+        val circles = nativeArray(emptyList())
+
+        val include: MutableList<String>? = Regions.getValue(region).include
+        val initialZoom: Double = Regions.getValue(region).initialZoom
+        val initialGeoPoint: Coordinate = Regions.getValue(region).initialPoint
+        val geodata: dynamic = Regions.getValue(region).geodata
 
         geodata.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
-                addCountry(country.properties.name)
+                addCountry(country.properties.name as String)
 
                 val countryStats = countryGeo(country)
 

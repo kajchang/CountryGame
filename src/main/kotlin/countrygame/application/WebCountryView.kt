@@ -34,7 +34,7 @@ class WebCountryView(
                 when (series.className) {
                     "MapPolygonSeries" -> {
                         series.children._values.forEach { sprite ->
-                            if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name == event.target.dataItem.dataContext.name) {
+                            if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
                                 sprite.states.removeKey("hover")
                                 sprite.setState("success")
                             }
@@ -42,7 +42,7 @@ class WebCountryView(
                     }
                     "MapImageSeries" -> {
                         series.children._values.forEach { sprite ->
-                            if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name == event.target.dataItem.dataContext.name) {
+                            if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
                                 sprite.children._values[0].states.removeKey("hover")
                                 sprite.children._values[0].setState("success")
                             }
