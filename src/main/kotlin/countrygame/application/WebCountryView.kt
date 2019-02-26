@@ -58,7 +58,7 @@ class WebCountryView(
     }
 
     override fun displayWin() {
-        countryToFindSpan.textContent = "You Win!"
+        countryToFindSpan.textContent = "Good Job!"
     }
 
     override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Map<String, Double>, circles: dynamic) {
@@ -115,7 +115,7 @@ class WebCountryView(
     }
 
     override fun displayCountryToFind(country: String) {
-        countryToFindSpan.textContent = "Find This Country: $country"
+        countryToFindSpan.textContent = "Find: $country"
     }
 
     init {
