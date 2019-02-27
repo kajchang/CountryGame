@@ -1,6 +1,6 @@
 package countrygame.application
 
-import countrygame.data.*
+import countrygame.data.Coordinate
 
 interface CountryView {
     var presenter: CountryPresenter

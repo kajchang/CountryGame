@@ -1,23 +1,6 @@
 package countrygame.data
 
 import amcharts4.geodata.*
-import countrygame.utilities.nativeObject
-
-interface Region {
-        val initialZoom: Double
-        val initialPoint: Coordinate
-        val include: MutableList<String>?
-        val geodata: dynamic
-}
-
-class Coordinate(private val latitude: Double, private val longitude: Double) {
-        fun toObject(): dynamic {
-                return nativeObject(mapOf(
-                        "latitude" to latitude,
-                        "longitude" to longitude
-                ))
-        }
-}
 
 class RegionRepository {
         object Asia : Region {
