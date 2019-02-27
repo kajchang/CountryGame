@@ -30,6 +30,8 @@ class WebCountryView(
     private val checkCountry: (dynamic) -> Unit = { event ->
         val success = presenter.checkCountry(event.target.dataItem.dataContext.name as String)
 
+        js("window.target = event.target")
+
         if (success) {
             event.target.parent.chart.series._values.forEach { series ->
                 when (series.className) {
@@ -38,6 +40,8 @@ class WebCountryView(
                             if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
                                 sprite.states.removeKey("hover")
                                 sprite.setState("success")
+                                sprite.events.off("over", overAll)
+                                sprite.events.off("out", outAll)
                             }
                         }
                     }
@@ -45,7 +49,9 @@ class WebCountryView(
                         series.children._values.forEach { sprite ->
                             if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
                                 sprite.children._values[0].states.removeKey("hover")
-                                sprite.children._values[0].setState("success")
+                                sprite.children._values[0].states.setState("success")
+                                sprite.events.off("over", overAll)
+                                sprite.events.off("out", outAll)
                             }
                         }
                     }
