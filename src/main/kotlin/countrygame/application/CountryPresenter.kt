@@ -26,10 +26,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     fun startGame() {
         if (!gameStarted) {
-            gameStarted = true
             if (!firstStart) {
                 setRegion(selectedRegion)
             }
+            gameStarted = true
             firstStart = false
             nextCountry()
             view.updateTimer(timer)
@@ -59,6 +59,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     }
 
     fun setRegion(region: String) {
+        firstStart = true
         selectedRegion = region
 
         reset()
