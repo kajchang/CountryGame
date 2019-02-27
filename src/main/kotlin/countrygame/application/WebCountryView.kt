@@ -7,6 +7,7 @@ import countrygame.data.Coordinate
 import countrygame.utilities.*
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
+import kotlin.browser.document
 
 class WebCountryView(
         private val buttonDiv: HTMLDivElement,
@@ -103,6 +104,24 @@ class WebCountryView(
         Unit
     }
 
+    override fun setOptions(options: Set<String>) {
+        unregister()
+
+        while (buttonDiv.childElementCount > 0) {
+            buttonDiv.removeChild(buttonDiv.childNodes[0]!!)
+        }
+
+        for (option in options) {
+            val button = document.createElement("button")
+            button.setAttribute("name", option)
+            button.setAttribute("style", "text-transform: capitalize;")
+            button.textContent = normalize(option)
+            buttonDiv.append(button)
+        }
+
+        register()
+    }
+
     override fun updateTimer(timer: Int) {
         timerElement.textContent = "${if (timer / 60 >= 10) "" else 0}${timer / 60}:${if (timer % 60 >= 10) "" else 0}${timer % 60}"
     }
@@ -112,7 +131,7 @@ class WebCountryView(
     }
 
     override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Coordinate, circles: dynamic) {
-        regionElement.textContent = regionName.replace('-', ' ')
+        regionElement.textContent = normalize(regionName)
         countryToFindSpan.textContent = ""
         timerElement.textContent = ""
 
@@ -169,10 +188,6 @@ class WebCountryView(
 
     override fun displayCountryToFind(country: String) {
         countryToFindSpan.textContent = "Find: $country"
-    }
-
-    init {
-        register()
     }
 
     override fun dispose() {

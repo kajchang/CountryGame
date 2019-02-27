@@ -5,6 +5,8 @@ import countrygame.utilities.*
 import kotlin.browser.window
 
 class CountryPresenter(override val view: CountryView) : Presenter<CountryView, Map<String, Any?>> {
+    private val regionRepository: RegionRepository = RegionRepository()
+
     private lateinit var selectedRegion: String
     private var gameStarted = false
     private var firstStart = true
@@ -18,6 +20,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     init {
         view.presenter = this
+        view.setOptions(regionRepository.getRegions().keys)
         setRegion("asia")
     }
 
@@ -62,10 +65,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
         val circles = nativeArray(emptyList())
 
-        val include: MutableList<String>? = Regions.getValue(region).include
-        val initialZoom: Double = Regions.getValue(region).initialZoom
-        val initialGeoPoint: Coordinate = Regions.getValue(region).initialPoint
-        val geodata: dynamic = Regions.getValue(region).geodata
+        val include: MutableList<String>? = regionRepository.getRegions().getValue(region).include
+        val initialZoom: Double = regionRepository.getRegions().getValue(region).initialZoom
+        val initialGeoPoint: Coordinate = regionRepository.getRegions().getValue(region).initialPoint
+        val geodata: dynamic = regionRepository.getRegions().getValue(region).geodata
 
         geodata.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
