@@ -79,7 +79,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                 @Suppress("UNCHECKED_CAST")
                 val overallLongCoords = countryStats[2] as List<Double>
 
-                if (biggestArea < 1) {
+                if (biggestArea < 1 / initialZoom) {
                     val center = centroid(overallLatCoords, overallLongCoords)
                     circles.push(nativeObject(mapOf(
                             "latitude" to center[1],

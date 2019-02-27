@@ -50,8 +50,57 @@ class WebCountryView(
                     }
                     else -> console.log("This never happens...")
                 }
+                Unit
             }
         }
+    }
+
+    private val overAll: (dynamic) -> Unit = { event ->
+         event.target.parent.chart.series._values.forEach { series ->
+             when (series.className) {
+                 "MapPolygonSeries" -> {
+                     series.children._values.forEach { sprite ->
+                         if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
+                             sprite.setState("hover")
+                         }
+                     }
+                 }
+                 "MapImageSeries" -> {
+                     series.children._values.forEach { sprite ->
+                         if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
+                             sprite.children._values[0].setState("hover")
+                         }
+                     }
+                 }
+                 else -> console.log("This never happens...")
+             }
+             Unit
+         }
+         Unit
+    }
+
+    private val outAll: (dynamic) -> Unit = { event ->
+        event.target.parent.chart.series._values.forEach { series ->
+            when (series.className) {
+                "MapPolygonSeries" -> {
+                    series.children._values.forEach { sprite ->
+                        if (sprite.className == "MapPolygon" && sprite.dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
+                            sprite.setState("default")
+                        }
+                    }
+                }
+                "MapImageSeries" -> {
+                    series.children._values.forEach { sprite ->
+                        if (sprite.className == "MapImage" && sprite.children._values[0].dataItem.dataContext.name as String == event.target.dataItem.dataContext.name as String) {
+                            sprite.children._values[0].setState("default")
+                        }
+                    }
+                }
+                else -> console.log("This never happens...")
+            }
+            Unit
+        }
+        Unit
     }
 
     override fun updateTimer(timer: Int) {
@@ -86,7 +135,8 @@ class WebCountryView(
             mapPolygonSeries.include = nativeArray(include)
         }
         mapPolygon.events.on("hit", checkCountry)
-
+        mapPolygon.events.on("over", overAll)
+        mapPolygon.events.on("out", outAll)
 
         val mapHover = mapPolygon.states.create("hover")
         mapHover.properties.fill = color("#AECAA7")
@@ -101,6 +151,8 @@ class WebCountryView(
         clickable.propertyFields.longitude = "longitude"
         clickableSeries.data = circles
         clickable.events.on("hit", checkCountry)
+        clickable.events.on("over", overAll)
+        clickable.events.on("out", outAll)
 
         val circle = clickable.createChild(Circle)
         circle.radius = 5
