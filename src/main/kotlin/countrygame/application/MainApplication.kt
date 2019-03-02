@@ -15,8 +15,9 @@ class MainApplication : ApplicationBase {
                 document.getElementById("start")!! as HTMLButtonElement,
                 document.getElementById("country-to-find")!!,
                 document.getElementById("map")!! as HTMLDivElement,
-                document.getElementById("region")!!,
-                document.getElementById("timer")!!)
+                document.getElementById("region")!! as HTMLHeadingElement,
+                document.getElementById("progress")!! as HTMLHeadingElement,
+                document.getElementById("timer")!! as HTMLHeadingElement)
         presenter = CountryPresenter(view)
 
         state["gameState"]?.let {gameState ->

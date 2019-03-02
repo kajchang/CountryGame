@@ -14,8 +14,9 @@ class WebCountryView(
         private val startButton: HTMLButtonElement,
         private val countryToFindSpan: Element,
         private val mapDiv: HTMLDivElement,
-        private val regionElement: Element,
-        private val timerElement: Element) : CountryView {
+        private val regionHeading: HTMLHeadingElement,
+        private val progressHeading: HTMLHeadingElement,
+        private val timerHeading: HTMLHeadingElement) : CountryView {
     override lateinit var presenter: CountryPresenter
 
     private val setRegion: (Event) -> Unit = { event ->
@@ -125,7 +126,7 @@ class WebCountryView(
     }
 
     override fun updateTimer(timer: Int) {
-        timerElement.textContent = "${if (timer / 60 >= 10) "" else 0}${timer / 60}:${if (timer % 60 >= 10) "" else 0}${timer % 60}"
+        timerHeading.textContent = "${if (timer / 60 >= 10) "" else 0}${timer / 60}:${if (timer % 60 >= 10) "" else 0}${timer % 60}"
     }
 
     override fun displayWin() {
@@ -133,9 +134,10 @@ class WebCountryView(
     }
 
     override fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Coordinate, circles: dynamic) {
-        regionElement.textContent = normalize(regionName)
+        regionHeading.textContent = normalize(regionName)
         countryToFindSpan.textContent = ""
-        timerElement.textContent = ""
+        progressHeading.textContent = ""
+        timerHeading.textContent = ""
 
         val map = create(mapDiv.id, MapChart)
         map.geodata = geodata
@@ -190,6 +192,10 @@ class WebCountryView(
 
     override fun displayCountryToFind(country: String) {
         countryToFindSpan.textContent = "Find: $country"
+    }
+
+    override fun displayProgress(progress: Int, total: Int) {
+        progressHeading.textContent = "$progress/$total"
     }
 
     override fun dispose() {

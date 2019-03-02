@@ -7,6 +7,7 @@ interface CountryView {
     fun setOptions(options: Set<String>)
     fun displayRegion(regionName: String, geodata: dynamic, include: MutableList<String>?, initialZoom: Double, initialPoint: Coordinate, circles: dynamic)
     fun displayCountryToFind(country: String)
+    fun displayProgress(progress: Int, total: Int)
     fun updateTimer(timer: Int)
     fun displayWin()
     fun dispose()

@@ -11,7 +11,8 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
     private var gameStarted = false
     private var firstStart = true
 
-    private var countryToFind: String = ""
+    private var countryToFind = ""
+    private var progress = 0
     private var countries = mutableListOf<String>()
     private var finishedCountries = mutableListOf<String>()
 
@@ -31,8 +32,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
             }
             gameStarted = true
             firstStart = false
-            nextCountry()
+            view.displayProgress(0, countries.size)
             view.updateTimer(timer)
+
+            nextCountry()
 
             interval = window.setInterval({
                 timer++
@@ -52,6 +55,8 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
             } else {
                 nextCountry()
             }
+            progress++
+            view.displayProgress(progress, if (countries.size > 0) countries.size + progress + 1 else countries.size + progress)
             return true
         }
 
@@ -73,6 +78,10 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
         geodata.features.forEach { country ->
             if (include?.contains(country.properties.id as String) != false) {
+                replacements[country.properties.name as String]?.let { replacement ->
+                    country.properties.name = replacement
+                }
+
                 addCountry(country.properties.name as String)
 
                 val countryStats = countryGeo(country)
@@ -143,6 +152,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         gameStarted = false
         countryToFind = ""
         timer = 0
+        progress = 0
         if (interval != null) {
             window.clearInterval(interval as Int)
             interval = null

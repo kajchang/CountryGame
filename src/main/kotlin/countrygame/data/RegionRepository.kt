@@ -32,7 +32,7 @@ class RegionRepository {
         }
 
         object Europe : Region {
-                override val initialZoom: Double = 2.0
+                override val initialZoom: Double = 1.8
                 override val initialPoint: Coordinate = Coordinate(60.79916329493254, 38.086777890879475)
                 override val include: MutableList<String>? = mutableListOf("XK", "GR", "PL", "MT", "RU", "DK", "AT", "BA", "GI", "BE", "PT", "SI", "DE", "GB", "RS", "HU", "AD", "MK", "UA", "BG", "LV", "CH", "BY", "IT", "SE", "SK", "LT", "RO", "SM", "CZ", "ES", "AL", "VA", "ME", "NO", "MD", "EE", "FR", "FI", "MC", "HR", "IE", "LI", "LU", "IS", "NL", "CY")
                 override val geodata: dynamic = am4geodata_worldHigh
