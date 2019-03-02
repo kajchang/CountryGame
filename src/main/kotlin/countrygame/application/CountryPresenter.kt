@@ -13,6 +13,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
 
     private var countryToFind = ""
     private var progress = 0
+    private var total = 0
     private var countries = mutableListOf<String>()
     private var finishedCountries = mutableListOf<String>()
 
@@ -32,7 +33,8 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
             }
             gameStarted = true
             firstStart = false
-            view.displayProgress(0, countries.size)
+            total = countries.size
+            view.displayProgress(progress, total)
             view.updateTimer(timer)
 
             nextCountry()
@@ -56,7 +58,7 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
                 nextCountry()
             }
             progress++
-            view.displayProgress(progress, if (countries.size > 0) countries.size + progress + 1 else countries.size + progress)
+            view.displayProgress(progress, total)
             return true
         }
 
@@ -151,8 +153,9 @@ class CountryPresenter(override val view: CountryView) : Presenter<CountryView, 
         countries.clear()
         gameStarted = false
         countryToFind = ""
-        timer = 0
         progress = 0
+        total = 0
+        timer = 0
         if (interval != null) {
             window.clearInterval(interval as Int)
             interval = null
