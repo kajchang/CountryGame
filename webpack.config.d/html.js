@@ -1,12 +1,12 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const fs = require('fs');
 
-if (process.env.TRAVIS) {
-    fs.writeFileSync(
-        path.join(__dirname, 'index.html'),
-        fs.readFileSync(
-            path.join(__dirname, '..', 'src', 'main', 'web', 'index.html'),
-            'utf8'
-        ).replace('countrygame.bundle.js', 'bundle/countrygame.bundle.js')
-    );
-}
+config.plugins.push(
+    new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: path.join(__dirname, '..', 'src', 'main', 'web', 'index.html')
+    })
+);
+
+config.plugins.push(new webpack.NamedModulesPlugin());
+config.plugins.push(new webpack.HotModuleReplacementPlugin());
