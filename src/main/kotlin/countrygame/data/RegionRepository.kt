@@ -26,7 +26,7 @@ class RegionRepository {
 
         object CentralAmerica: Region {
                 override val initialZoom: Double = 1.0
-                override val initialPoint: Coordinate = Coordinate(15.789250770393188, -88.44455939810537)
+                override val initialPoint: Coordinate = Coordinate(13.789250770393188, -88.44455939810537)
                 override val include: MutableList<String>? = mutableListOf("BZ", "NI", "HT", "PA", "GT", "MX", "CR", "BS", "JM", "TT", "DO", "PR", "BB", "SV", "MQ", "HN", "DM", "GD", "AG", "CU")
                 override val geodata: dynamic = am4geodata_worldHigh
         }
